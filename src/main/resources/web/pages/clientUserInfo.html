@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>个人信息</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../dist/css/client.css" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand">用户系统</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#" id="showName">name</a></li>
+                <li><a href="#" id="logout">登出</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li class="active"><a href="clientUserInfo.html">个人信息</a></li>
+                <li><a href="clientChangePwd.html">修改密码</a></li>
+                <li><a href="clientMyDevices.html">我的设备</a></li>
+            </ul>
+        </div>
+        <div class="col-md-6 col-md-offset-2 main">
+            <h3 class="page-header">个人信息</h3>
+            <form id="userInfo">
+                <div class="form-group">
+                    <label for="userId">UserId</label>
+                    <input type="text" class="form-control" id="userId" name="userId" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input type="text" class="form-control" id="username" name="username" readonly>
+                </div>
+                <input type="password" id="password" name="password" hidden>
+                <div class="form-group">
+                    <label for="name">姓名</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="请输入姓名">
+                </div>
+                <div class="form-group">
+                    <label for="sex">性别</label>
+                    <select class="form-control" id="sex" name="sex">
+                        <option>请选择性别</option>
+                        <option value="男">男</option>
+                        <option value="女">女</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="level">用户级别</label>
+                    <select class="form-control" id="level" name="level" readonly>
+                        <option value="0" selected>请选择权限等级</option>
+                        <option value="1">实习工</option>
+                        <option value="2">正式工</option>
+                        <option value="3">经理</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" id="updateUser">修改信息</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var userId = localStorage.getItem("userId");
+        if (userId == null)
+            window.location.href = "clientLogin.html";
+        $.ajax({
+            url: "http://localhost:8080/wm/accesscontrol/user/" + userId,
+            type: "get",
+            contentType: "application/json",
+            dataType: "json",
+            success: function (data) {
+                $("#showName").text(data.data.name);
+                $("#userId").val(data.data.userId);
+                $("#username").val(data.data.username);
+                $("#password").val(data.data.password);
+                $("#name").val(data.data.name);
+                $("#sex").val(data.data.sex);
+                $("#level").val(data.data.level);
+            }
+        })
+    });
+
+    $("#updateUser").click(function () {
+        var updateData = $("#userInfo").serializeArray();
+        var jsonObj = {};
+        for (x in updateData)
+            jsonObj[updateData[x].name] = updateData[x].value;
+        var data = JSON.stringify(jsonObj);
+        $.ajax({
+            url: "http://localhost:8080/wm/accesscontrol/user",
+            contentType: 'application/json',
+            dataType: "json",
+            type: "put",
+            data: data,
+            success: function (data) {
+                alert(data.msg);
+                window.location.reload();
+            }
+        });
+    });
+
+    $("#logout").click(function () {
+        localStorage.clear();
+        window.location.href = "clientLogin.html";
+    })
+
+</script>
+</body>
+</html>

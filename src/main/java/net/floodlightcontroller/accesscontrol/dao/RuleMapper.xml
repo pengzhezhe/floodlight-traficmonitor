@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.floodlightcontroller.accesscontrol.dao.RuleDao">
+    <resultMap id="RuleMap" type="net.floodlightcontroller.accesscontrol.domain.Rule">
+        <id property="ruleId" column="rule_id"/>
+        <result property="userLevel" column="user_level"/>
+        <result property="deviceType" column="device_type"/>
+        <result property="destUserLevel" column="dest_user_level"/>
+        <result property="destDeviceType" column="dest_device_type"/>
+        <result property="action" column="action"/>
+    </resultMap>
+
+    <select id="listAllRules" resultMap="RuleMap">
+        select rule_id, user_level, device_type, dest_user_level, dest_device_type, action
+        from rule
+    </select>
+
+    <insert id="insertRule" parameterType="net.floodlightcontroller.accesscontrol.domain.Rule">
+        insert into rule(user_level, device_type, dest_user_level, dest_device_type, action)
+        values (#{userLevel}, #{deviceType}, #{destUserLevel}, #{destDeviceType}, #{action})
+    </insert>
+
+    <delete id="deleteRule" parameterType="Integer">
+        delete
+        from rule
+        where rule_id = #{ruleId}
+    </delete>
+
+    <update id="updateRule" parameterType="net.floodlightcontroller.accesscontrol.domain.Rule">
+        update rule
+        set user_level=#{userLevel},
+            device_type=#{deviceType},
+            dest_user_level=#{destUserLevel},
+            dest_device_type=#{destDeviceType},
+            action=#{action}
+        where rule_id = #{ruleId}
+    </update>
+
+</mapper>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Floodlight OpenFlow Controller - Traffic Monitor</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="../bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+
+    <!-- DataTables CSS -->
+    <link href="../bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css"
+          rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="../bower_components/datatables-responsive/css/dataTables.responsive.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Animate.css -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.4.0/animate.min.css" rel="stylesheet" type="text/css" />
+    <link href="../bower_components/pnotify/css/pnotify.css" rel="stylesheet" />
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- 引入 ECharts 文件 -->
+    <script src="../js/echarts.min.js"></script>
+
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html" id="home-button-title">Floodlight OpenFlow Controller </a>
+        </div>
+        <!-- /.navbar-header -->
+
+        <!-- /.navbar-top-links -->
+        <div class="navbar-default sidebar" role="navigation">
+            <div class="sidebar-nav navbar-collapse">
+                <nav id="navMenu">
+
+                </nav>
+            </div>
+            <!-- /.sidebar-collapse -->
+        </div>
+        <!-- /.navbar-static-side -->
+    </nav>
+
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="page-header">Traffic Monitor</h3>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <i class="fa fa-table fa-fw"></i>Strategy
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+
+                        <div class="dataTable_wrapper">
+                            <table class="table table-hover" id="StrategyTable" width="100%">
+                                <tr>
+                                    <td><b>MaxSpeed(Bps)</b></td>
+                                    <td>: <span id="maxSpeed"></span></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Action</b></td>
+                                    <td>: <span id="action"></span></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Action Duration(s)</b></td>
+                                    <td>: <span id="actionDuration"></span></td>
+                                </tr>
+                                <tr>
+                                    <br />
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-primary" data-toggle="modal"
+                                           data-target="#strategyConfigModal"> Config Strategy </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+
+        <!-- Strategy Config -->
+        <div class="modal fade" tabindex="-1" id="strategyConfigModal" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" id="roleModalCloseButton2" data-dismiss="modal"
+                                aria-label="Close">
+                            <span aria-hidden="true">x</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel2">Policy Config</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form">
+                            <div class="form-group">
+                                <label>MaxSpeed(Bps,Used to detect abnormal traffic)</label>
+                                <input class="form-control" type="text" id="inputmaxSpeed" placeholder="0">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Action</label>
+                                <select class="form-control" id="selectAction" onchange="checkRateLimitSelected()">
+                                    <option value="drop">drop</option>
+                                    <option value="limit" id="limit">limit</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Action Duration (s)</label>
+                                <input class="form-control" type="text" id="inputActionDuration" placeholder="0">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Rate Limit (Bps)</label>
+                                <input class="form-control" type="text" id="inputRateLimit" readonly="readonly"
+                                       placeholder="100">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnUpdateStrategy" class="btn btn-sm btn-primary">Update</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- /#page-wrapper -->
+    <div id="login-modal-include"></div>
+
+</div>
+<!-- jQuery -->
+<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="../bower_components/metisMenu/dist/metisMenu.min.js"></script>
+
+<!-- DataTables JavaScript -->
+<script src="../bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="../bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
+
+<!-- PNotify -->
+<script src="../bower_components/pnotify/pnotify.buttons.js"></script>
+<script src="../bower_components/pnotify/pnotify.core.js"></script>
+<script src="../bower_components/pnotify/pnotify.nonblock.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="../dist/js/sb-admin-2.js"></script>
+
+<!-- Custom scripts -->
+<script src="../js/querystringparser.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+
+<!-- Custom scripts to load in HTML -->
+<script src="../js/navbar.js"></script>
+
+<script>
+    $(function () {
+        $("#login-modal-include").load("loginmodal.html");
+    });
+</script>
+<script>
+    /*
+        * 	打印策略到表格上
+        * */
+    $(document).ready(function () {
+        loadStrategy();
+    });
+    function loadStrategy() {
+        $.ajax({
+            url: "http://" + ipaddress + ":" + restport + "/wm/trafficmonitor/strategy/list/json",
+            success: function (data) {
+                $('#maxSpeed').html(data["maxSpeed"]);
+                $('#action').html(data["action"]);
+                $('#actionDuration').html(data["actionDuring"]);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error: ' + " " + jqXHR.responseText + " \n Status: " + textStatus + " \n Error Thrown: " + errorThrown);
+            }
+        });
+    }
+
+    /*
+    * 	若下拉菜单选中"limit"，则允许输入Rate Limit
+    *  否则，清除Rate Limit文本框并将其设为只读
+    * */
+    function checkRateLimitSelected() {
+        var selectedOption = $("#selectAction option:selected");
+
+        if (selectedOption.val() == "limit") {
+            $('#inputRateLimit').removeAttr("readonly");
+        }
+        else {
+            $('#inputRateLimit').attr("readonly", true);
+            $('#inputRateLimit').val("0");
+        }
+
+    }
+
+    $("#btnUpdateStrategy").click(function () {
+        updateStrategy();
+    });
+    // /* 更新策略 */
+    function updateStrategy() {
+        var maxSpeed = $("#inputmaxSpeed").val();
+        var action = $("#selectAction").val();
+        var actionDuration = $("#inputActionDuration").val();
+
+        /* 将数据组装成json格式 */
+        var postData = "";
+
+        postData += '{"maxSpeed":';
+        if (maxSpeed != "")
+            postData += "\"" + maxSpeed + "\",";
+        else
+            postData += '"0",';
+
+        postData += '"action":';
+        if (action != "")
+            postData += "\"" + action + "\",";
+        else
+            postData += '"none",';
+
+        postData += '"actionDuring":';
+        if (actionDuration != "")
+            postData += "\"" + actionDuration + "\",";
+        else
+            postData += '"0",';
+
+
+        postData += "}";
+
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            url: "http://" + ipaddress + ":" + restport + "/wm/trafficmonitor/strategy/conf/json",
+            data: postData,
+            success: function (data) {
+                if (data["status"] == "Strategy updated") {
+                    new PNotify({
+                        title: 'Strategy updated',
+                        text: 'Strategy has been updated successfully.',
+                        type: 'success',
+                        hide: true
+                    });
+
+                    loadStrategy();
+                }
+                else {
+
+                    new PNotify({
+                        title: 'Error Occured.',
+                        type: 'error',
+                        hide: true
+                    });
+                }
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error: ' + " " + jqXHR.responseText + " \n Status: " + textStatus + " \n Error Thrown: " + errorThrown);
+            }
+        });
+
+    }
+</script>
+</body>
+
+</html>

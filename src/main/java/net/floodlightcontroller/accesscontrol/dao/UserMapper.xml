@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.floodlightcontroller.accesscontrol.dao.UserDao">
+    <resultMap id="UserMap" type="net.floodlightcontroller.accesscontrol.domain.User">
+        <id property="userId" column="user_id"/>
+        <result property="username" column="username"/>
+        <result property="name" column="name"/>
+        <result property="sex" column="sex"/>
+        <result property="password" column="password"/>
+        <result property="level" column="level"/>
+        <collection property="devices" ofType="net.floodlightcontroller.accesscontrol.domain.Device">
+            <id property="deviceId" column="device_id"/>
+            <result property="macAddress" column="mac_address"/>
+            <result property="deviceType" column="device_type"/>
+        </collection>
+    </resultMap>
+
+    <insert id="insertUser" parameterType="net.floodlightcontroller.accesscontrol.domain.User">
+        insert into user(username, name, sex, password, level)
+        values (#{username}, #{name}, #{sex}, #{password}, #{level})
+    </insert>
+
+    <update id="updateUser" parameterType="net.floodlightcontroller.accesscontrol.domain.User">
+        update user
+        set name=#{name},
+            sex=#{sex},
+            password=#{password},
+            level=#{level}
+        where user_id = #{userId}
+    </update>
+
+    <delete id="deleteUser" parameterType="Integer">
+        delete
+        from user
+        where user_id = #{userId}
+    </delete>
+
+    <select id="listAllUsers" resultMap="UserMap">
+        select user.user_id,
+               username,
+               name,
+               sex,
+               password,
+               level,
+               device_id,
+               mac_address,
+               device_type
+        from user
+                 left join device
+                           on device.user_id = user.user_id
+    </select>
+
+    <select id="getUserByUserId" parameterType="Integer" resultMap="UserMap">
+        select user.user_id,
+               username,
+               name,
+               sex,
+               password,
+               level,
+               device_id,
+               mac_address,
+               device_type
+        from user
+                 left join device
+                           on device.user_id = user.user_id
+        where user.user_id = #{userId}
+    </select>
+
+    <select id="getUserByUsername" parameterType="String" resultMap="UserMap">
+        select user.user_id,
+               username,
+               name,
+               sex,
+               password,
+               level,
+               device_id,
+               mac_address,
+               device_type
+        from user
+                 left join device
+                           on device.user_id = user.user_id
+        where username = #{username}
+    </select>
+
+</mapper>

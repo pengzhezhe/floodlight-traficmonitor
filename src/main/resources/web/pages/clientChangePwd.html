@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>修改密码</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../dist/css/client.css" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand">用户系统</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#" id="showName">name</a></li>
+                <li><a href="#" id="logout">登出</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="clientUserInfo.html">个人信息</a></li>
+                <li class="active"><a href="clientChangePwd.html">修改密码</a></li>
+                <li><a href="clientMyDevices.html">我的设备</a></li>
+            </ul>
+        </div>
+
+        <div class="col-md-6 col-md-offset-2 main">
+            <h3 class="page-header">修改密码</h3>
+            <form id="changePwdForm">
+                <div class="form-group">
+                    <label for="oldPwd">旧密码</label>
+                    <input type="password" class="form-control" id="oldPwd" placeholder="旧密码">
+                </div>
+                <div class="form-group">
+                    <label for="newPwd">新密码</label>
+                    <input type="password" class="form-control" id="newPwd" placeholder="新密码">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary" id="changePwd" type="submit">提交</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var userId = localStorage.getItem("userId");
+        if (userId == null)
+            window.location.href = "clientLogin.html";
+        $.ajax({
+            url: "http://localhost:8080/wm/accesscontrol/user/" + userId,
+            type: "get",
+            contentType: "application/json",
+            dataType: "json",
+            success: function (data) {
+                $("#showName").text(data.data.name);
+            }
+        })
+    });
+
+    $("#changePwdForm").submit(function (event) {
+        event.preventDefault();
+        var user = new Object();
+        user.userId = localStorage.getItem("userId");
+        user.oldPwd = $("#oldPwd").val();
+        user.newPwd = $("#newPwd").val();
+        console.log(user);
+        var data = JSON.stringify(user);
+        $.ajax({
+            url: "http://localhost:8080/wm/accesscontrol/changePwd",
+            type: "POST",
+            contentType: "application/json",
+            dataType: "json",
+            data: data,
+            success: function (data) {
+                if (data.code == 1) {
+                    alert(data.msg);
+                    window.location.href = "clientUserInfo.html";
+                } else {
+                    alert(data.msg);
+                    window.location.reload();
+                }
+            }
+        });
+    });
+
+    $("#logout").click(function () {
+        localStorage.clear();
+        window.location.href = "clientLogin.html";
+    })
+
+</script>
+</body>
+</html>

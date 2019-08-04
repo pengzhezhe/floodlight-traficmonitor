@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.floodlightcontroller.accesscontrol.dao.DeviceDao">
+    <resultMap id="DeviceMap" type="net.floodlightcontroller.accesscontrol.domain.Device">
+        <id property="deviceId" column="device_id"/>
+        <result property="macAddress" column="mac_address"/>
+        <result property="deviceType" column="device_type"/>
+        <result property="userId" column="user_id"/>
+        <association property="user" javaType="net.floodlightcontroller.accesscontrol.domain.User">
+            <id property="userId" column="user_id"/>
+            <result property="username" column="username"/>
+            <result property="name" column="name"/>
+            <result property="sex" column="sex"/>
+            <result property="password" column="password"/>
+            <result property="level" column="level"/>
+        </association>
+    </resultMap>
+
+    <insert id="insertDevice" parameterType="net.floodlightcontroller.accesscontrol.domain.Device">
+        insert into device(user_id, mac_address, device_type)
+        values (#{userId}, #{macAddress}, #{deviceType})
+    </insert>
+
+    <update id="updateDevice" parameterType="net.floodlightcontroller.accesscontrol.domain.Device">
+        update device
+        set user_id=#{userId},
+            mac_address=#{macAddress},
+            device_type=#{deviceType}
+        where device_id = #{deviceId}
+    </update>
+
+    <delete id="deleteDevice" parameterType="Integer">
+        delete
+        from device
+        where device_id = #{deviceId}
+    </delete>
+
+    <select id="listAllDevices" resultMap="DeviceMap">
+        select device_id,
+               mac_address,
+               device_type,
+               user.user_id,
+               username,
+               name,
+               sex,
+               password,
+               level
+        from device,
+             user
+        where user.user_id = device.user_id
+    </select>
+
+    <select id="listDevicesByUserId" parameterType="Integer" resultMap="DeviceMap">
+        select device_id,
+               mac_address,
+               device_type,
+               user.user_id,
+               username,
+               name,
+               sex,
+               password,
+               level
+        from device,
+             user
+        where device.user_id = #{userId}
+          and user.user_id = device.user_id
+    </select>
+
+</mapper>

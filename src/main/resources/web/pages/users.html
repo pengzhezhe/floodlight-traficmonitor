@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Floodlight OpenFlow Controller - Users</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- MetisMenu CSS -->
+    <link href="../bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link href="../bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css"
+          rel="stylesheet">
+    <!-- DataTables Responsive CSS -->
+    <link href="../bower_components/datatables-responsive/css/dataTables.responsive.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div id="wrapper">
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-static-top" rule="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html" id="home-button-title">Floodlight OpenFlow Controller </a>
+        </div>
+        <!-- /.navbar-header -->
+        <!-- /.navbar-top-links -->
+        <div class="navbar-default sidebar" rule="navigation">
+            <div class="sidebar-nav navbar-collapse">
+                <nav id="navMenu"></nav>
+            </div>
+            <!-- /.sidebar-collapse -->
+        </div>
+        <!-- /.navbar-static-side -->
+    </nav>
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="page-header">用户管理</h3>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+
+        <div class="row">
+            <div class="col-md-1">
+                <a href="#" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addModal">添加用户</a>
+            </div>
+            <br>
+            <br>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        用户列表
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="dataTable_wrapper">
+                            <table class="table table-striped table-bordered table-hover" id="usersTable" width="100%">
+                                <thead>
+                                <tr>
+                                    <th>用户ID</th>
+                                    <th>用户名</th>
+                                    <th>姓名</th>
+                                    <th>性别</th>
+                                    <th>密码</th>
+                                    <th>用户级别</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <!-- /.table-responsive -->
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /#page-wrapper -->
+
+<div aria-hidden="true" class="modal fade" id="addModal" rule="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" type="button">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">添加用户</h4>
+            </div>
+            <div class="modal-body">
+                <form action="javascript:void(0)" id="addForm" rule="form">
+                    <div class="form-group">
+                        <label for="username">用户名</label>
+                        <input class="form-control" id="username" name="username" placeholder="请输入用户名" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">姓名</label>
+                        <input class="form-control" id="name" name="name" placeholder="请输入姓名" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label for="sex">性别</label>
+                        <select class="form-control" id="sex" name="sex">
+                            <option>请选择性别</option>
+                            <option value="男">男</option>
+                            <option value="女">女</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">密码</label>
+                        <input class="form-control" id="password" name="password" placeholder="请输入密码"
+                               type="password">
+                    </div>
+                    <div class="form-group">
+                        <label for="level">权限等级</label>
+                        <select class="form-control" id="level" name="level">
+                            <option value="0" selected>请选择权限等级</option>
+                            <option value="1">实习工</option>
+                            <option value="2">正式工</option>
+                            <option value="3">经理</option>
+                            <option value="5">管理员</option>
+                        </select>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal" type="button">取消</button>
+                    <button class="btn btn-primary" id="addUser" type="button">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div aria-hidden="true" class="modal fade" id="editModal" rule="dialog" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" type="button">&times;</button>
+                <h4 class="modal-title" id="myModalLabe2">更改用户</h4>
+            </div>
+            <div class="modal-body">
+                <form action="javascript:void(0)" id="updateForm" rule="form">
+                    <div class="form-group">
+                        <label for="editUserId">UserId</label>
+                        <input class="form-control" id="editUserId" name="userId" readonly type="text">
+                    </div>
+                    <div class="form-group">
+                        <label for="editUsername">用户名</label>
+                        <input class="form-control" id="editUsername" name="username" readonly type="text">
+                    </div>
+                    <div class="form-group">
+                        <label for="editName">姓名</label>
+                        <input class="form-control" id="editName" name="name" placeholder="请输入姓名" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label for="editSex">性别</label>
+                        <select class="form-control" id="editSex" name="sex">
+                            <option>请选择性别</option>
+                            <option value="男">男</option>
+                            <option value="女">女</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editPassword">密码</label>
+                        <input class="form-control" id="editPassword" name="password" readonly type="password">
+                    </div>
+                    <div class="form-group">
+                        <label for="level">权限等级</label>
+                        <select class="form-control" id="editLevel" name="level">
+                            <option value="0" selected>请选择权限等级</option>
+                            <option value="1">实习工</option>
+                            <option value="2">正式工</option>
+                            <option value="3">经理</option>
+                            <option value="5">管理员</option>
+                        </select>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal" type="button">取消</button>
+                    <button class="btn btn-primary" id="updateUser" type="button">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /#wrapper -->
+<!-- jQuery -->
+<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- Metis Menu Plugin JavaScript -->
+<script src="../bower_components/metisMenu/dist/metisMenu.min.js"></script>
+<!-- DataTables JavaScript -->
+<script src="../bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="../bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
+<!-- Custom Theme JavaScript -->
+<script src="../dist/js/sb-admin-2.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+
+
+<!-- Custom scripts to load in HTML -->
+<script src="../js/navbar.js"></script>
+
+<script>
+    var table = $('#usersTable').DataTable({
+        ajax: {
+            url: "http://localhost:8080/wm/accesscontrol/user",
+            type: "get",
+            dataSrc: "data"
+        },
+        searching: true,
+        info: false,
+        autoWidth: false,
+        columns: [
+            {data: 'userId', width: "10%"},
+            {data: 'username', width: "15%"},
+            {data: 'name', width: "15%"},
+            {data: 'sex', width: "15%"},
+            {data: 'password', width: "15%"},
+            {data: 'level', width: "15%"},
+            {width: "10%"}
+        ],
+        columnDefs: [
+            {
+                "render": function (data, type, row, meta) {
+                    var html = "<div class=\"btn-group\">\n" +
+                        "                                            <button class=\"btn btn-sm btn-warning\" name=\"edit\" onclick='editUser($(this))'>\n" +
+                        "                                                <span aria-hidden=\"true\" class=\"glyphicon glyphicon-pencil\" ></span>编辑\n" +
+                        "                                            </button>\n" +
+                        "                                            <button class=\"btn btn-sm btn-danger\" name=\"delete\" onclick='deleteUser($(this))'>\n" +
+                        "                                                <span aria-hidden=\"true\" class=\"glyphicon glyphicon-remove\" ></span>删除\n" +
+                        "                                            </button>\n" +
+                        "                                        </div>";
+                    return html;
+                },
+                "targets": 6
+            },
+            {
+                "render": function (data, type, row, meta) {
+                    if (data == 1)
+                        return '实习工';
+                    if (data == 2)
+                        return '正式工';
+                    if (data == 3)
+                        return '经理';
+                    else
+                        return '管理员';
+                },
+                "targets": 5
+            }
+        ]
+    });
+
+    $("#addUser").click(function () {
+        var adddata = $("#addForm").serializeArray();
+        var jsonObj = {};
+        for (x in adddata)
+            jsonObj[adddata[x].name] = adddata[x].value;
+        var data = JSON.stringify(jsonObj);
+        $.ajax({
+            url: "http://localhost:8080/wm/accesscontrol/user",
+            type: "post",
+            contentType: 'application/json',
+            dataType: "json",
+            data: data,
+            success: function (data) {
+                if (data.code == 1) {
+                    $('#addModal').modal('hide');
+                    alert("add success");
+                    window.location.reload();
+                } else {
+                    alert("add failed");
+                }
+            },
+            error: function (data) {
+                alert("error");
+            }
+        });
+
+    });
+
+    function deleteUser(btn) {
+        var data = table.row(btn.parents('tr')).data();
+        var id = data["userId"];
+        var msg = "你确定要删除选中数据吗";
+        if (confirm(msg) == true) {
+            $.ajax({
+                url: "http://localhost:8080/wm/accesscontrol/user/" + id,
+                type: "delete",
+                success: function (data) {
+                    if (data.code == 1)
+                        alert(data.msg);
+                    else
+                        alert(data.msg);
+                    window.location.reload();
+                },
+                error: function (data) {
+                    alert("错误");
+                }
+            });
+        }
+    }
+
+    function editUser(btn) {
+        var data = table.row(btn.parents('tr')).data();
+        $('#editModal').on('show.bs.modal', function (event) {
+            $('#editUserId').val(data["userId"]);
+            $('#editUsername').val(data["username"]);
+            $('#editName').val(data["name"]);
+            $('#editSex').val(data["sex"]);
+            $('#editPassword').val(data["password"]);
+            $('#editLevel').val(data["level"]);
+        });
+        $('#editModal').modal('show');
+    }
+
+    $('#updateUser').click(function () {
+        var updateData = $("#updateForm").serializeArray();
+        var jsonObj = {};
+        for (x in updateData)
+            jsonObj[updateData[x].name] = updateData[x].value;
+        var data = JSON.stringify(jsonObj);
+        $.ajax({
+            url: "http://localhost:8080/wm/accesscontrol/user",
+            contentType: 'application/json',
+            dataType: "json",
+            type: "put",
+            data: data,
+            success: function (data) {
+                if (data.code == 1) {
+                    $('#editModal').modal('hide');
+                    alert("update success");
+                    window.location.reload();
+                } else {
+                    alert("update failed");
+                }
+            },
+            error: function (data) {
+                alert("error");
+            }
+        });
+    });
+</script>
+</body>
+</html>
