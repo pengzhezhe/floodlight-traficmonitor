@@ -7,23 +7,32 @@ import org.projectfloodlight.openflow.types.DatapathId;
 import org.projectfloodlight.openflow.types.OFPort;
 import org.projectfloodlight.openflow.types.U64;
 
-
 import java.util.LinkedList;
 import java.util.Map;
 
 public interface ITrafficMonitorService extends IFloodlightService {
-    //获取所有交换机的带宽状态
+    /**
+     * Obtain all switch bandwidth information
+     *
+     * @return
+     */
     public Map<NodePortTuple, SwitchPortBandwidth> getBandwidthMap();
+
     //获取指定交换机的带宽状态
     public SwitchPortBandwidth getBandwidth(DatapathId dpid, OFPort port);
-    //获取策略
-    public Strategy getStrategy();
+
     //获取事件
     public LinkedList<Event> getEvents();
+
+    //获取策略
+    public Strategy getStrategy();
+
     //设置策略
     public void setStrategy(U64 maxSpeed, String action, long actionDuring);
+
     //查看白名单
     public LinkedList<WhiteList> getWhiteLists();
+
     //加入白名单
     public void addWhiteList(NodePortTuple nodePortTuple, String flow);
 }

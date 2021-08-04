@@ -8,7 +8,7 @@ import org.projectfloodlight.openflow.types.U64;
 
 import java.util.Date;
 
-@JsonSerialize(using= EventSerializer.class)
+@JsonSerialize(using = EventSerializer.class)
 public class Event {
     private Date time;                  //事件发生事件
     private NodePortTuple source;       //事件发生源头
@@ -16,19 +16,19 @@ public class Event {
     private U64 txSpeed;                //端口输出流量
     private Strategy strategy;               //策略
 
-    public Event(){
-        time=new Date();
-        source=null;
-        rxSpeed=txSpeed=U64.ZERO;
-        strategy=null;
+    public Event() {
+        time = new Date();
+        source = null;
+        rxSpeed = txSpeed = U64.ZERO;
+        strategy = null;
     }
 
-    public Event(SwitchPortBandwidth bw,Strategy strategy){
-        time=new Date();
-        source=new NodePortTuple(bw.getSwitchId(),bw.getSwitchPort());
-        rxSpeed=U64.of(bw.getBitsPerSecondRx().getValue());
-        txSpeed=U64.of(bw.getBitsPerSecondTx().getValue());
-        this.strategy=new Strategy(strategy);
+    public Event(SwitchPortBandwidth bw, Strategy strategy) {
+        time = new Date();
+        source = new NodePortTuple(bw.getSwitchId(), bw.getSwitchPort());
+        rxSpeed = U64.of(bw.getBitsPerSecondRx().getValue());
+        txSpeed = U64.of(bw.getBitsPerSecondTx().getValue());
+        this.strategy = new Strategy(strategy);
     }
 
     public Date getTime() {
