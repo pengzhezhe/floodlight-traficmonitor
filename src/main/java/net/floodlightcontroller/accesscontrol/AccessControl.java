@@ -127,6 +127,7 @@ public class AccessControl implements IAccessControl, IOFMessageListener, IFlood
                         .build();
                 //使用StaticEntryPusher发送流表
                 staticEntryPusherService.addFlow("flow" + flowNum++, flowAdd, sw.getId());
+                return Command.STOP;
             }
         }
         return Command.CONTINUE;
