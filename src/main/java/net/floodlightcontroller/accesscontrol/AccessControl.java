@@ -51,12 +51,12 @@ public class AccessControl implements IAccessControl, IOFMessageListener, IFlood
 
     @Override
     public boolean isCallbackOrderingPrereq(OFType type, String name) {
-        return (type == OFType.PACKET_IN && name.equals("forwarding"));
+        return (type.equals(OFType.PACKET_IN) && (name.equals("topology") || name.equals("devicemanager")));
     }
 
     @Override
     public boolean isCallbackOrderingPostreq(OFType type, String name) {
-        return false;
+        return (type == OFType.PACKET_IN && name.equals("forwarding"));
     }
 
     @Override
